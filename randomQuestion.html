@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=GBK">
+<title>Random Question by ZYT</title>
+<style type="text/css">
+div.inputLine
+{
+   margin: 3px; 
+}
+td
+{
+   width: 240px;
+   height: 40px;
+}
+#result
+{
+   padding-left: 50px;
+}
+</style>
+<script type="text/javascript">
+
+function formatInt2(i)
+{
+   if(i < 10)
+      return '0' + i;
+   return '' + i;
+}
+
+function dateStr(date)
+{
+   return "" + date.getFullYear() + "-" + formatInt2(date.getMonth() + 1) + "-" + formatInt2(date.getDate());
+}
+
+function getRandom(leastValue, mostValue)
+{
+   return Math.round(leastValue + (mostValue - leastValue) * Math.random());
+}
+
+function outputString(s)
+{
+   document.getElementById("result").innerHTML += s;
+}
+
+var usedQuestionList = [];
+
+function spawn1Question()
+{
+   usedQuestionList = [];
+   var mostValue = parseInt(document.getElementById("most").value);
+   var leastValue = parseInt(document.getElementById("least").value);
+   var spawnCountX = parseInt(document.getElementById("countX").value);
+   var tableString = '';
+   tableString += "<table>";
+   for(var i = 0; i < spawnCountX; i++)
+   {
+      var number1 = getRandom(leastValue, mostValue);
+      var number2 = getRandom(leastValue, mostValue);
+      var mark = Math.random();
+      var question;
+      if(mark > 0.5)
+      {
+         question = "" + number1 + " + " + number2 + " =";
+      }
+      else
+      { 
+         if(number1 > number2)
+         {
+            question = "" + number1 + " - " + number2 + " =";
+         }
+         else
+         {
+            question = "" + number1 + " + " + number2 + " =";
+         }
+      }
+      if(usedQuestionList.indexOf(question) < 0)
+      {
+         if(i == 0)
+            tableString += "<tr>";
+         else if(i % 3 == 0)
+            tableString += "</tr><tr>";
+         tableString += "<td>";
+         tableString += question;
+         tableString += "</td>";
+         usedQuestionList.push(question);
+      }
+      else
+         i--;
+   }
+   tableString += "</tr></table>";
+   outputString(tableString);
+   
+}
+
+function spawnWhole()
+{
+   document.getElementById("inputpara").style.display = "none";
+   var date = new Date(document.getElementById("beginDate").value);
+   var spawnCountY = parseInt(document.getElementById("countY").value);
+   for(var i = 0; i < spawnCountY; i++)
+   {
+      outputString("<br><br>日期：" + dateStr(date) + "&nbsp; ")
+      outputString("班级________&nbsp; 姓名________&nbsp; 分数______&nbsp; 时间_____<br><br>")
+      spawn1Question();
+      date = new Date(date.valueOf() + 1*24*60*60*1000);
+      if(i < spawnCountY - 1)
+         outputString('<div style="page-break-after: always;"></div>');
+   }
+}
+</script>
+</head>
+<body>
+<div id="inputpara">
+<div class="inputLine">
+最高值&nbsp; = <input id="most" type="number" value="15">
+</div>
+<div class="inputLine">
+最低值&nbsp; = <input id="least" type="number" value="0">
+</div>
+<div class="inputLine">
+题数&nbsp;&nbsp; = <input id="countX" type="number" value="50">
+</div>
+<div class="inputLine">
+题组数&nbsp; = <input id="countY" type="number" value="7">
+</div>
+<div class="inputLine">
+起始日期 = <input id="beginDate" type="date" value="">
+</div>
+<input onclick="javascript:spawnWhole()" type="button" value="出题">
+</div>
+<div id="result">
+</div>
+<script type="text/javascript">
+var todayStr = dateStr(new Date());
+document.getElementById("beginDate").value = todayStr
+</script>
+</body>
+</htmL>
