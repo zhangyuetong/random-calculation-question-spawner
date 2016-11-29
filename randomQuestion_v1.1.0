@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=GBK">
+<title>Random Question by ZYT</title>
+<style type="text/css">
+div.inputLine
+{
+   margin: 3px; 
+}
+td
+{
+   width: 240px;
+   height: 40px;
+}
+#result
+{
+   padding-left: 50px;
+}
+</style>
+<script type="text/javascript">
+
+function formatInt2(i)
+{
+   if(i < 10)
+      return '0' + i;
+   return '' + i;
+}
+
+function dateStr(date)
+{
+   return "" + date.getFullYear() + "-" + formatInt2(date.getMonth() + 1) + "-" + formatInt2(date.getDate());
+}
+
+function getRandom(leastValue, mostValue)
+{
+   return Math.round(leastValue + (mostValue - leastValue) * Math.random());
+}
+
+function outputString(s)
+{
+   document.getElementById("result").innerHTML += s;
+}
+
+function dig(exp)
+{
+   numbers = exp.match(/[0-9]+/g);
+   marks = exp.match(/[\+\-]/g);
+   if(marks == null)
+      alert(exp)
+   digPlace = getRandom(0, marks.length);
+   finalExp = ""
+   for(var i = 0; i < numbers.length; i++)
+   {
+      if(i != digPlace)
+	 finalExp += numbers[i] 
+      else
+         finalExp += "(  )";
+      if(i < marks.length)
+         finalExp += " " + marks[i] + " "
+   }
+   finalExp += " = " + eval(exp)
+   return finalExp;
+}
+
+var usedQuestionList = [];
+
+function spawn1Question(leastValue, mostValue, doubleProper)
+{
+      var number;
+      var mark;
+      var markStr;
+      var question = "";
+      var markCount = Math.random();
+      if(markCount < doubleProper)
+         markCount = 2
+      else
+	 markCount = 1
+      for(var j = 0; j < markCount; j++)
+      {
+	 number = getRandom(leastValue, mostValue);
+         mark = Math.random();
+         markStr = "";
+         if(mark > 0.5)
+         {
+            markStr = " + ";
+         }
+         else
+         { 
+            markStr = " - ";
+         }
+         question += number;
+         if(eval(question) <= 0)
+         {
+	    question = "";
+	    j = -1;
+            continue;
+         }
+         question += markStr;
+      }
+      number = getRandom(leastValue, mostValue);
+      question += number;
+      return question;
+}
+
+function finalQuestion()
+{   
+   usedQuestionList = [];
+   var doubleProper = parseInt(document.getElementById("doubleProper").value) / 100.0;
+   var digProper = parseInt(document.getElementById("digProper").value) / 100.0;
+   var mostValue = parseInt(document.getElementById("most").value);
+   var leastValue = parseInt(document.getElementById("least").value);
+   var spawnCountX = parseInt(document.getElementById("countX").value);
+   var tableString = '';
+   tableString += "<table>";
+   var type = 0
+   for(var i = 0; i < spawnCountX; i++)
+   {
+      type = Math.random()
+      question = spawn1Question(leastValue, mostValue, doubleProper);
+      slovedQuestion = eval(question)
+      if(slovedQuestion <= 0)
+      {
+         i--;
+         continue;
+      }
+      if(type < digProper)
+         question = dig(question);
+      else
+         question += " =";
+
+      if(usedQuestionList.indexOf(question) < 0)
+      {
+         if(i == 0)
+            tableString += "<tr>";
+         else if(i % 3 == 0)
+            tableString += "</tr><tr>";
+         tableString += "<td>";
+         tableString += question;
+         tableString += "</td>";
+         usedQuestionList.push(question);
+      }
+      else
+         i--;
+   }
+   tableString += "</tr></table>";
+   outputString(tableString);  
+}
+
+function spawnWhole()
+{
+   document.getElementById("inputpara").style.display = "none";
+   var date = new Date(document.getElementById("beginDate").value);
+   var spawnCountY = parseInt(document.getElementById("countY").value);
+   for(var i = 0; i < spawnCountY; i++)
+   {
+      outputString("<br><br>日期：" + dateStr(date) + "&nbsp; ")
+      outputString("班级________&nbsp; 姓名________&nbsp; 分数______&nbsp; 时间_____<br><br>")
+      finalQuestion();
+      date = new Date(date.valueOf() + 1*24*60*60*1000);
+      if(i < spawnCountY - 1)
+         outputString('<div style="page-break-after: always;"></div>');
+   }
+}
+</script>
+</head>
+<body>
+<div id="inputpara">
+<div class="inputLine">
+最高值&nbsp; = <input id="most" type="number" value="15">
+</div>
+<div class="inputLine">
+最低值&nbsp; = <input id="least" type="number" value="0">
+</div>
+<div class="inputLine">
+题数&nbsp;&nbsp; = <input id="countX" type="number" value="50">
+</div>
+<div class="inputLine">
+题组数&nbsp; = <input id="countY" type="number" value="7">
+</div>
+<div class="inputLine">
+起始日期 = <input id="beginDate" type="date" value="">
+</div>
+<div class="inputLine">
+双符概率 = <input id="doubleProper" type="number" value="50"> %
+</div>
+<div class="inputLine">
+挖空概率 = <input id="digProper" type="number" value="50"> %
+</div>
+<input onclick="javascript:spawnWhole()" type="button" value="出题">
+</div>
+<div id="result">
+</div>
+<script type="text/javascript">
+var todayStr = dateStr(new Date());
+document.getElementById("beginDate").value = todayStr
+</script>
+</body>
+</htmL>
