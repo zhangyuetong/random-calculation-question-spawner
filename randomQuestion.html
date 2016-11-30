@@ -42,18 +42,42 @@ function outputString(s)
    document.getElementById("result").innerHTML += s;
 }
 
+function dig(exp)
+{
+   numbers = exp.match(/[0-9]+/g);
+   marks = exp.match(/[\+\-]/g);
+   if(marks == null)
+      alert(exp)
+   digPlace = getRandom(0, marks.length);
+   finalExp = ""
+   for(var i = 0; i < numbers.length; i++)
+   {
+      if(i != digPlace)
+	 finalExp += numbers[i] 
+      else
+         finalExp += "(  )";
+      if(i < marks.length)
+         finalExp += " " + marks[i] + " "
+   }
+   finalExp += " = " + eval(exp)
+   return finalExp;
+}
+
 var usedQuestionList = [];
 
-function spawn1Question(leastValue, mostValue)
+function spawn1Question(leastValue, mostValue, doubleProper)
 {
       var number;
       var mark;
       var markStr;
       var question = "";
-      var markCount = getRandom(1, 2)
+      var markCount = Math.random();
+      if(markCount < doubleProper)
+         markCount = 2
+      else
+	 markCount = 1
       for(var j = 0; j < markCount; j++)
       {
-
 	 number = getRandom(leastValue, mostValue);
          mark = Math.random();
          markStr = "";
@@ -66,10 +90,10 @@ function spawn1Question(leastValue, mostValue)
             markStr = " - ";
          }
          question += number;
-         if(eval(question) < 0)
+         if(eval(question) <= 0)
          {
 	    question = "";
-	    j = 0;
+	    j = -1;
             continue;
          }
          question += markStr;
@@ -82,21 +106,28 @@ function spawn1Question(leastValue, mostValue)
 function finalQuestion()
 {   
    usedQuestionList = [];
+   var doubleProper = parseInt(document.getElementById("doubleProper").value) / 100.0;
+   var digProper = parseInt(document.getElementById("digProper").value) / 100.0;
    var mostValue = parseInt(document.getElementById("most").value);
    var leastValue = parseInt(document.getElementById("least").value);
    var spawnCountX = parseInt(document.getElementById("countX").value);
    var tableString = '';
    tableString += "<table>";
+   var type = 0
    for(var i = 0; i < spawnCountX; i++)
    {
-      question = spawn1Question(leastValue, mostValue);
+      type = Math.random()
+      question = spawn1Question(leastValue, mostValue, doubleProper);
       slovedQuestion = eval(question)
-      if(slovedQuestion < 0)
+      if(slovedQuestion <= 0)
       {
          i--;
          continue;
       }
-      question += " ="
+      if(type < digProper)
+         question = dig(question);
+      else
+         question += " =";
 
       if(usedQuestionList.indexOf(question) < 0)
       {
@@ -149,6 +180,12 @@ function spawnWhole()
 </div>
 <div class="inputLine">
 起始日期 = <input id="beginDate" type="date" value="">
+</div>
+<div class="inputLine">
+双符概率 = <input id="doubleProper" type="number" value="50"> %
+</div>
+<div class="inputLine">
+挖空概率 = <input id="digProper" type="number" value="50"> %
 </div>
 <input onclick="javascript:spawnWhole()" type="button" value="出题">
 </div>
