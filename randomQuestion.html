@@ -44,8 +44,43 @@ function outputString(s)
 
 var usedQuestionList = [];
 
-function spawn1Question()
+function spawn1Question(leastValue, mostValue)
 {
+      var number;
+      var mark;
+      var markStr;
+      var question = "";
+      var markCount = getRandom(1, 2)
+      for(var j = 0; j < markCount; j++)
+      {
+
+	 number = getRandom(leastValue, mostValue);
+         mark = Math.random();
+         markStr = "";
+         if(mark > 0.5)
+         {
+            markStr = " + ";
+         }
+         else
+         { 
+            markStr = " - ";
+         }
+         question += number;
+         if(eval(question) < 0)
+         {
+	    question = "";
+	    j = 0;
+            continue;
+         }
+         question += markStr;
+      }
+      number = getRandom(leastValue, mostValue);
+      question += number;
+      return question;
+}
+
+function finalQuestion()
+{   
    usedQuestionList = [];
    var mostValue = parseInt(document.getElementById("most").value);
    var leastValue = parseInt(document.getElementById("least").value);
@@ -54,25 +89,15 @@ function spawn1Question()
    tableString += "<table>";
    for(var i = 0; i < spawnCountX; i++)
    {
-      var number1 = getRandom(leastValue, mostValue);
-      var number2 = getRandom(leastValue, mostValue);
-      var mark = Math.random();
-      var question;
-      if(mark > 0.5)
+      question = spawn1Question(leastValue, mostValue);
+      slovedQuestion = eval(question)
+      if(slovedQuestion < 0)
       {
-         question = "" + number1 + " + " + number2 + " =";
+         i--;
+         continue;
       }
-      else
-      { 
-         if(number1 > number2)
-         {
-            question = "" + number1 + " - " + number2 + " =";
-         }
-         else
-         {
-            question = "" + number1 + " + " + number2 + " =";
-         }
-      }
+      question += " ="
+
       if(usedQuestionList.indexOf(question) < 0)
       {
          if(i == 0)
@@ -88,8 +113,7 @@ function spawn1Question()
          i--;
    }
    tableString += "</tr></table>";
-   outputString(tableString);
-   
+   outputString(tableString);  
 }
 
 function spawnWhole()
@@ -101,7 +125,7 @@ function spawnWhole()
    {
       outputString("<br><br>日期：" + dateStr(date) + "&nbsp; ")
       outputString("班级________&nbsp; 姓名________&nbsp; 分数______&nbsp; 时间_____<br><br>")
-      spawn1Question();
+      finalQuestion();
       date = new Date(date.valueOf() + 1*24*60*60*1000);
       if(i < spawnCountY - 1)
          outputString('<div style="page-break-after: always;"></div>');
