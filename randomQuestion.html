@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html; charset=GBK">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>Random Question by ZYT</title>
 <style type="text/css">
 div.inputLine
@@ -154,8 +154,8 @@ function spawnWhole()
    var spawnCountY = parseInt(document.getElementById("countY").value);
    for(var i = 0; i < spawnCountY; i++)
    {
-      outputString("<br><br>ÈÕÆÚ£º" + dateStr(date) + "&nbsp; ")
-      outputString("°à¼¶________&nbsp; ĞÕÃû________&nbsp; ·ÖÊı______&nbsp; Ê±¼ä_____<br><br>")
+      outputString("<br><br>æ—¥æœŸï¼š" + dateStr(date) + "&nbsp; ")
+      outputString("ç­çº§________&nbsp; å§“å________&nbsp; åˆ†æ•°______&nbsp; æ—¶é—´_____<br><br>")
       finalQuestion();
       date = new Date(date.valueOf() + 1*24*60*60*1000);
       if(i < spawnCountY - 1)
@@ -167,27 +167,27 @@ function spawnWhole()
 <body>
 <div id="inputpara">
 <div class="inputLine">
-×î¸ßÖµ&nbsp; = <input id="most" type="number" value="15">
+æœ€é«˜å€¼&nbsp; = <input id="most" type="number" value="15">
 </div>
 <div class="inputLine">
-×îµÍÖµ&nbsp; = <input id="least" type="number" value="0">
+æœ€ä½å€¼&nbsp; = <input id="least" type="number" value="0">
 </div>
 <div class="inputLine">
-ÌâÊı&nbsp;&nbsp; = <input id="countX" type="number" value="50">
+é¢˜æ•°&nbsp;&nbsp; = <input id="countX" type="number" value="50">
 </div>
 <div class="inputLine">
-Ìâ×éÊı&nbsp; = <input id="countY" type="number" value="7">
+é¢˜ç»„æ•°&nbsp; = <input id="countY" type="number" value="7">
 </div>
 <div class="inputLine">
-ÆğÊ¼ÈÕÆÚ = <input id="beginDate" type="date" value="">
+èµ·å§‹æ—¥æœŸ = <input id="beginDate" type="date" value="">
 </div>
 <div class="inputLine">
-Ë«·û¸ÅÂÊ = <input id="doubleProper" type="number" value="50"> %
+åŒç¬¦æ¦‚ç‡ = <input id="doubleProper" type="number" value="50"> %
 </div>
 <div class="inputLine">
-ÍÚ¿Õ¸ÅÂÊ = <input id="digProper" type="number" value="50"> %
+æŒ–ç©ºæ¦‚ç‡ = <input id="digProper" type="number" value="50"> %
 </div>
-<input onclick="javascript:spawnWhole()" type="button" value="³öÌâ">
+<input onclick="javascript:spawnWhole()" type="button" value="å‡ºé¢˜">
 </div>
 <div id="result">
 </div>
